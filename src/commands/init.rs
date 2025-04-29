@@ -63,22 +63,22 @@ pub fn execute(remotes: Vec<(String, String)>) -> Result<(), String> {
                     let _ = fs::remove_dir_all(&git_dir);
                     return Err(format!("Failed to create 'all' remote: {error}"));
                 }
-            } else {
-                // Add additional URLs to the "all" remote
-                let update_all_output = Command::new("git")
-                    .args(["remote", "set-url", "--add", "--push", "all", url])
-                    .current_dir(&current_dir)
-                    .stdout(Stdio::null())
-                    .stderr(Stdio::piped())
-                    .output()
-                    .map_err(|e| format!("Failed to update 'all' remote: {e}"))?;
-                
-                if !update_all_output.status.success() {
-                    let error = String::from_utf8_lossy(&update_all_output.stderr);
-                    // Clean up by removing the .git directory
-                    let _ = fs::remove_dir_all(&git_dir);
-                    return Err(format!("Failed to update 'all' remote: {error}"));
-                }
+            }
+
+            // Add additional URLs to the "all" remote
+            let update_all_output = Command::new("git")
+                .args(["remote", "set-url", "--add", "--push", "all", url])
+                .current_dir(&current_dir)
+                .stdout(Stdio::null())
+                .stderr(Stdio::piped())
+                .output()
+                .map_err(|e| format!("Failed to update 'all' remote: {e}"))?;
+            
+            if !update_all_output.status.success() {
+                let error = String::from_utf8_lossy(&update_all_output.stderr);
+                // Clean up by removing the .git directory
+                let _ = fs::remove_dir_all(&git_dir);
+                return Err(format!("Failed to update 'all' remote: {error}"));
             }
         }
     }
