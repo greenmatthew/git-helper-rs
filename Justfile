@@ -48,14 +48,24 @@ test:
 clippy:
     cargo clippy -- -W clippy::pedantic
 
-# Install the binary to the user's PATH
-install: build-release
+# Install using cargo (user-level installation)
+install:
+    cargo install --path .
+
+# Install the binary to system-wide location (requires sudo)
+install-system: build-release
     @echo "Installing {{name}} to {{install_dir}}"
     @sudo cp {{release_binary}} {{install_dir}}
     @echo "Installation complete!"
 
-# Uninstall the application
+# Uninstall the application from cargo bin directory
 uninstall:
+    @echo "Removing {{name}} from cargo bin directory"
+    cargo uninstall {{name}}
+    @echo "Uninstallation complete!"
+
+# Uninstall the application from system-wide location (requires sudo)
+uninstall-system:
     @echo "Removing {{name}} from {{install_dir}}"
     @sudo rm -f {{install_dir}}/{{name}}
     @echo "Uninstallation complete!"
