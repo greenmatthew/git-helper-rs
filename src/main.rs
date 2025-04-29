@@ -83,7 +83,7 @@ fn main() {
             }
         }
         _ => {
-            // This should not be reached due to arg_required_else_help(true)
+            panic!("Unexpected command - This should not be reached due to arg_required_else_help(true)");
         }
     }
 }
