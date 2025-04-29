@@ -13,8 +13,7 @@ A simple CLI tool that provides convenient abstractions for common Git commands.
 For a list of available commands and options:
 
 ```
-git-helper --help
-git-helper -h
+git-helper help
 ```
 
 ## Examples
