@@ -12,7 +12,8 @@ A simple CLI tool that provides convenient abstractions for common Git commands.
 
 There are two ways to install `git-helper`:
 
-### 1. User-level installation (recommended)
+<details>
+<summary><b>User-level installation</b></summary>
 
 Install the binary to your Cargo bin directory:
 
@@ -22,7 +23,9 @@ just install
 
 Note: Make sure Cargo's bin directory is part of your PATH, you'll need to do that to run git-helper from anywhere.
 
-### 2. System-wide installation
+</details>
+<details>
+<summary><b>System-wide installation</b></summary>
 
 Install the binary to /usr/local/bin (requires sudo):
 
@@ -31,6 +34,8 @@ just install-system
 ```
 
 This method makes the binary available to all users on the system.
+
+</details>
 
 ## Usage
 
