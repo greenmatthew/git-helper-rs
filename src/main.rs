@@ -3,12 +3,19 @@ use std::process::exit;
 mod commands;
 
 const VERSION: &str = "0.1.0";
+const LICENSE: &str = include_str!("../LICENSE");
 
 fn main() {
     let matches = Command::new("git-helper")
         .version(VERSION)
         .about("A CLI tool to simplify Git repository management")
         .arg_required_else_help(true)
+        .arg(
+            Arg::new("license")
+                .long("license")
+                .help("Display the license information")
+                .action(clap::ArgAction::SetTrue),
+        )
         .subcommand(
             Command::new("init")
                 .about("Initializes a git repository")
@@ -36,6 +43,11 @@ fn main() {
                 ),
         )
         .get_matches();
+
+    if matches.get_flag("license") {
+        println!("{LICENSE}");
+        return;
+    }
 
     match matches.subcommand() {
         Some(("init", sub_matches)) => {
