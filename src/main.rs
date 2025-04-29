@@ -21,6 +21,20 @@ fn main() {
                         .action(clap::ArgAction::Append),
                 ),
         )
+        .subcommand(
+            Command::new("submodule")
+                .about("Commands for managing Git submodules")
+                .subcommand(
+                    Command::new("purge")
+                        .about("Completely removes a submodule by deinitializing, removing from git modules, and deleting the directory")
+                        .arg(
+                            Arg::new("PATH")
+                                .help("Path to the submodule to purge")
+                                .required(true)
+                                .index(1),
+                        ),
+                ),
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -45,10 +59,24 @@ fn main() {
                 exit(1);
             }
         }
-        Some(("submodule", _sub_matches)) => {
-            todo!("Implement git submodule commands.");
+        Some(("submodule", sub_matches)) => {
+            match sub_matches.subcommand() {
+                Some(("purge", purge_matches)) => {
+                    if let Some(path) = purge_matches.get_one::<String>("PATH") {
+                        if let Err(e) = commands::submodule::purge(path) {
+                            eprintln!("Error: {e}");
+                            exit(1);
+                        }
+                    }
+                }
+                _ => {
+                    println!("Unknown submodule command. Available commands: purge");
+                    exit(1);
+                }
+            }
         }
         _ => {
+            // This should not be reached due to arg_required_else_help(true)
         }
     }
 }
