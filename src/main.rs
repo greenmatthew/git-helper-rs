@@ -2,7 +2,7 @@ use clap::{Arg, Command};
 use std::process::exit;
 mod commands;
 
-const VERSION: &str = "0.1.0";
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 const LICENSE: &str = include_str!("../LICENSE");
 
 fn main() {
