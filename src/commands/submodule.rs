@@ -65,6 +65,6 @@ pub fn purge(path: &str) -> Result<(), String> {
         return Err(format!("Failed to remove submodule from working tree: {error}"));
     }
     
-    println!("Submodule '{}' has been successfully purged.", path);
+    println!("Submodule '{path}' has been successfully purged.");
     Ok(())
 }
