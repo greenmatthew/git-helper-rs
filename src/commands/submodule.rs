@@ -2,7 +2,8 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
 pub fn purge(path: &str) -> Result<(), String> {
-    let submodule_path = Path::new(path);
+    // Prefix with underscore to indicate intentional non-use
+    let _submodule_path = Path::new(path);
     
     // Step 1: Deinitialize the submodule
     let deinit_output = Command::new("git")

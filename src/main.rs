@@ -72,19 +72,17 @@ fn main() {
             }
         }
         Some(("submodule", sub_matches)) => {
-            match sub_matches.subcommand() {
-                Some(("purge", purge_matches)) => {
-                    if let Some(path) = purge_matches.get_one::<String>("PATH") {
-                        if let Err(e) = commands::submodule::purge(path) {
-                            eprintln!("Error: {e}");
-                            exit(1);
-                        }
+            // Replace the match with if-let as suggested by clippy
+            if let Some(("purge", purge_matches)) = sub_matches.subcommand() {
+                if let Some(path) = purge_matches.get_one::<String>("PATH") {
+                    if let Err(e) = commands::submodule::purge(path) {
+                        eprintln!("Error: {e}");
+                        exit(1);
                     }
                 }
-                _ => {
-                    println!("Unknown submodule command. Available commands: purge");
-                    exit(1);
-                }
+            } else {
+                println!("Unknown submodule command. Available commands: purge");
+                exit(1);
             }
         }
         _ => {
