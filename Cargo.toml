@@ -1,5 +1,5 @@
 [package]
-name = "git-helper-rs"
+name = "git-helper"
 version = "0.1.0"
 edition = "2024"
 
