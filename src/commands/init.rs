@@ -1,9 +1,8 @@
 use std::env;
 use std::fs;
-use std::path::Path;
 use std::process::{Command, Stdio};
 
-pub fn execute(remotes: Vec<(String, String)>) -> Result<(), String> {
+pub fn execute(remotes: &[(String, String)]) -> Result<(), String> {
     let current_dir = env::current_dir().map_err(|e| format!("Failed to get current directory: {e}"))?;
     
     // Delete existing .git directory if it exists

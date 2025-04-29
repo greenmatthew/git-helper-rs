@@ -40,12 +40,12 @@ fn main() {
                 Vec::new()
             };
             
-            if let Err(e) = commands::init::execute(remotes) {
+            if let Err(e) = commands::init::execute(&remotes) {
                 eprintln!("Error: {e}");
                 exit(1);
             }
         }
-        Some(("submodule", sub_matches)) => {
+        Some(("submodule", _sub_matches)) => {
             todo!("Implement git submodule commands.");
         }
         _ => {
