@@ -16,7 +16,7 @@ fn main() {
                     Arg::new("remote")
                         .long("remote")
                         .value_names(["NAME", "URL"])
-                        .help("Add a remote to the repository")
+                        .help("Add a remote to the repository. When multiple remotes are specified, an 'all' remote is automatically created. The first remote is used as the primary remote for fetching, and all remotes are added for pushing.")
                         .num_args(2)
                         .action(clap::ArgAction::Append),
                 ),
