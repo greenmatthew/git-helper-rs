@@ -29,6 +29,24 @@ fn main() {
                 ),
         )
         .subcommand(
+            Command::new("remote")
+                .about("Commands for managing Git remotes")
+                .arg_required_else_help(true)
+                .subcommand(
+                    Command::new("reinit")
+                        .about("Reinitializes the remote configuration for an existing repository")
+                        .arg(
+                            Arg::new("remote")
+                                .long("remote")
+                                .value_names(["NAME", "URL"])
+                                .help("Add a remote to the repository. When multiple remotes are specified, an 'all' remote is automatically created. The first remote is used as the primary remote for fetching, and all remotes are added for pushing.")
+                                .num_args(2)
+                                .action(clap::ArgAction::Append)
+                                .required(true),
+                        ),
+                ),
+        )
+        .subcommand(
             Command::new("submodule")
                 .about("Commands for managing Git submodules")
                 .arg_required_else_help(true)  // Add this line
@@ -55,7 +73,7 @@ fn main() {
             let remotes = if let Some(values) = sub_matches.get_many::<String>("remote") {
                 let values: Vec<&String> = values.collect();
                 let mut remotes = Vec::new();
-                
+
                 // Collect name-url pairs from the flattened values
                 for chunk in values.chunks(2) {
                     if chunk.len() == 2 {
@@ -66,10 +84,33 @@ fn main() {
             } else {
                 Vec::new()
             };
-            
+
             if let Err(e) = commands::init::execute(&remotes) {
                 eprintln!("Error: {e}");
                 exit(1);
+            }
+        }
+        Some(("remote", sub_matches)) => {
+            if let Some(("reinit", reinit_matches)) = sub_matches.subcommand() {
+                let remotes = if let Some(values) = reinit_matches.get_many::<String>("remote") {
+                    let values: Vec<&String> = values.collect();
+                    let mut remotes = Vec::new();
+                    
+                    // Collect name-url pairs from the flattened values
+                    for chunk in values.chunks(2) {
+                        if chunk.len() == 2 {
+                            remotes.push((chunk[0].clone(), chunk[1].clone()));
+                        }
+                    }
+                    remotes
+                } else {
+                    Vec::new()
+                };
+                
+                if let Err(e) = commands::remote::reinit::execute(&remotes) {
+                    eprintln!("Error: {e}");
+                    exit(1);
+                }
             }
         }
         Some(("submodule", sub_matches)) => {
