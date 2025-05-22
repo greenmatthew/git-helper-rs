@@ -2,12 +2,9 @@
 
 # Define variables
 name := "git-helper"
-target_dir := "target"
-release_dir := target_dir / "release"
-debug_dir := target_dir / "debug"
-release_binary := release_dir / name
-debug_binary := debug_dir / name
+release_binary := "target/release" / name
 install_dir := "/usr/local/bin"
+windows_cwd := `wslpath -aw $(pwd)`
 
 # Default recipe to run when just is called without arguments
 default: help
@@ -58,6 +55,15 @@ install-system: build-release
     @sudo cp {{release_binary}} {{install_dir}}
     @echo "Installation complete!"
 
+# Install using cargo (user-level installation) to Windows
+install-windows:
+    @echo "Installing {{name}} to Windows using Windows Cargo..."
+    powershell.exe -Command "cd \{{windows_cwd}}; cargo install --path ."
+
+# Install to both WSL and Windows
+install-all: install install-windows
+    @echo "Installed to both WSL and Windows environments!"
+
 # Uninstall the application from cargo bin directory
 uninstall:
     @echo "Removing {{name}} from cargo bin directory"
@@ -69,3 +75,11 @@ uninstall-system:
     @echo "Removing {{name}} from {{install_dir}}"
     @sudo rm -f {{install_dir}}/{{name}}
     @echo "Uninstallation complete!"
+
+uninstall-windows:
+    @echo "Removing {{name}} from Windows..."
+    powershell.exe -Command "cd \{{windows_cwd}}; cargo uninstall {{name}}"
+    @echo "Windows uninstallation complete!"
+
+uninstall-all: uninstall uninstall-system uninstall-windows
+    @echo "Uninstalled from both WSL and Windows environments!"
